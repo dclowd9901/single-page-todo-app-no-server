@@ -19,7 +19,8 @@
   // Set the application endpoint and load the configuration.
   require.config({
     paths: {
-      underscore: "../bower_components/lodash/dist/lodash.underscore"
+      underscore: "../bower_components/lodash/dist/lodash.underscore",
+      sinon: "../bower_components/sinon/pkg/sinon"
     },
 
     baseUrl: "base/app"

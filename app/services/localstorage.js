@@ -1,22 +1,10 @@
 define('services/localstorage', ['lodash', 'backbone'], function(_, Backbone) {
-  
-  /**
-   * Overrides Backbone's base-level sync method. Since Backbone usually
-   * expects to interact with a backend server, we had to basically rewrite
-   * a localstorage interface from scratch. (sure, we could've probably stolen
-   * one, but where's the fun in that?)
-   * 
-   * @param  {String} method Type of method to utilize (create, read, update or delete)
-   * @param  {Object} model  Model being updated
-   * @param  {Object} opts   Arbitrary set of options to follow the process around.
-   * @return {Various}       Depending on the operation, the user might expect
-   *                         any number of return values.
-   */
-  Backbone.sync = function(method, model, opts) {
-    return api[method].apply(this, [model, opts]);
-  };
 
   var api = {
+    syncOverride: function(method, model, opts) {
+      return api[method].apply(this, [model, opts]);
+    },
+
     /**
      * We create the store in LocalStorage in this name. Should be as unique as
      * possible.
@@ -78,13 +66,12 @@ define('services/localstorage', ['lodash', 'backbone'], function(_, Backbone) {
       api.store[opts.table] = api.store[opts.table] || [];
 
       // A model made the call
-      if (model.collection) {
+      if (model && model.collection) {
         model.collection.set(api.store[opts.table]);
       } else {
       // A collection made the call
         this.set(api.store[opts.table]);
       }
-      
       return api.store[opts.table];
     },
 
@@ -132,8 +119,24 @@ define('services/localstorage', ['lodash', 'backbone'], function(_, Backbone) {
     }
   };
 
+  /**
+   * Overrides Backbone's base-level sync method. Since Backbone usually
+   * expects to interact with a backend server, we had to basically rewrite
+   * a localstorage interface from scratch. (sure, we could've probably stolen
+   * one, but where's the fun in that?)
+   * 
+   * @param  {String} method Type of method to utilize (create, read, update or delete)
+   * @param  {Object} model  Model being updated
+   * @param  {Object} opts   Arbitrary set of options to follow the process around.
+   * @return {Various}       Depending on the operation, the user might expect
+   *                         any number of return values.
+   */
+  Backbone.sync = api.syncOverride;
+
   // Bootstrap store
   if (!api.ls.getItem(api.namespace)) {
     api.ls.setItem(api.namespace, '{}');
   }
+
+  return api;
 });

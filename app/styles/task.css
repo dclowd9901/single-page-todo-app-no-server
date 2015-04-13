@@ -22,6 +22,10 @@
   display: none;
 }
 
+.edit-task {
+  float: right;
+}
+
 [removed="true"] .restore-task {
   display: inline-block;
 }

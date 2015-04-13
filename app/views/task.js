@@ -10,8 +10,12 @@ define('views/task', [
     events: {
       'click input': 'inputChanged',
       'click .share': 'share',
-      'click .restore-task': 'restoreTask'
+      'click .restore-task': 'restoreTask',
+      'click .edit-task': 'editTask',
+      'click .done-editing': 'doneEditing'
     },
+
+    editMode: false,
 
     /**
      * @override
@@ -25,13 +29,20 @@ define('views/task', [
 
     template: _.template('<input type="checkbox" id="task-<%= id %>" class="task-complete" <%= complete ? "checked=checked" : ""%>"><label class="name" for="task-<%= id %>"><%= name %></label> <button class="share">Share</button>'),
     restoreButton: _.template('<button class="restore-task">Restore</button>'),
+    editButton: _.template('<button class="edit-task">Edit</button>'),
+    editTemplate: _.template('<input type="text" class="task-name" value="<%= name %>"><button class="done-editing">Done</button>'),
 
     /**
      * @override
      */
     render: function() {
-      this.$el.html(this.template(this.model.attributes));
-      this.$el.append(this.restoreButton(this.model.attributes));
+      if (this.editMode) {
+        this.$el.html(this.editTemplate(this.model.attributes));
+      } else {
+        this.$el.html(this.template(this.model.attributes));
+        this.$el.append(this.restoreButton(this.model.attributes));
+        this.$el.append(this.editButton());
+      }
 
       return this;
     },
@@ -58,6 +69,23 @@ define('views/task', [
      */
     restoreTask: function() {
       this.model.save({removed:false}, {table: 'tasks'});
+    },
+
+    /**
+     * Makes a task editable with an input field.
+     */
+    editTask: function() {
+      this.editMode = true;
+      this.render();
+    },
+
+    /**
+     * Completes the editing cycle.
+     */
+    doneEditing: function() {
+      this.model.set({ name: this.$el.find('.task-name').val() });
+      this.editMode = false;      
+      this.model.save();
     }
   }); 
 });
