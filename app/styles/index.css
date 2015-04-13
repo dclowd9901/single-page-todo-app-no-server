@@ -3,3 +3,7 @@
 @import "../../bower_components/pure/pure.css";
 
 /*-- Application stylesheets. -----------------------------------------------*/
+
+@import "./base.css";
+@import "./task.css";
+@import "./tasklist.css";

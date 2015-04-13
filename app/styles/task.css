@@ -1,0 +1,31 @@
+.share {
+  float: right;
+}
+
+.task {
+  clear: both;
+  padding: 20px 0;
+}
+
+.task-complete {
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+[removed="true"] {
+  display: none;
+  opacity: .5;
+}
+
+.restore-task {
+  float: right;
+  display: none;
+}
+
+[removed="true"] .restore-task {
+  display: inline-block;
+}
+
+[complete="true"] label {
+  text-decoration: line-through;
+}

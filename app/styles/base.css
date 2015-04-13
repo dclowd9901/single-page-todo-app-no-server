@@ -1,0 +1,35 @@
+body {
+  background: #efefef;
+}
+
+#main {
+  background: #fff;
+  width: 600px;
+  margin: 0 auto;
+  padding: 1px 25px 25px 25px;
+}
+
+button {
+  border: 0;
+  background-color: #327CCB;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 3px;
+  transition: background-color 300ms;
+  margin: 0 5px;
+}
+
+button:hover {
+  background-color: #72A4DA;
+}
+
+li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
